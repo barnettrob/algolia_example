@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const { expressPort } = require("./config");
-const { getAlgoliaMovieRecords } = require("./algoliaClient.js")
+const { getAlgoliaMovieRecords, indexToAlgolia } = require("./algoliaClient.js")
 
 app.get("/", (req, res) => {
   res.send(
@@ -19,9 +19,18 @@ app.get("/index", async (req, res) => {
     return false
   })
 
-  console.log("movies", movies)
-  console.log('length', movies.length)
-  res.send(`You've reached the index page`);
+  if (movies.length > 0) {
+    indexToAlgolia(movies)
+    .then(res => {
+      return res
+    })
+    .catch(e => {
+      console.log("indexToAlgolia error:", e.message)
+      return res.status(500).send("Something went wrong indexing")
+    })
+  }
+
+  res.send(`Movies have been indexed.`);
 });
 
 app.listen(expressPort, function() {

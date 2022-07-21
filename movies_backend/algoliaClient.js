@@ -1,7 +1,6 @@
 const { algolia } = require("./config");
 const axios = require("axios");
-const algolia = require("algoliasearch");
-const { default: algoliasearch } = require("algoliasearch");
+const algoliasearch = require("algoliasearch");
 
 const getAlgoliaMovieRecords = async function () {
   const records = await axios
@@ -21,7 +20,7 @@ const getAlgoliaMovieRecords = async function () {
       return data;
     })
     .catch((e) => {
-      console.log("e", e.message);
+      console.log("getAlgoliaMovieRecords error:", e.message);
       return {
         statusCode: 500,
         body: JSON.stringify({
@@ -33,15 +32,23 @@ const getAlgoliaMovieRecords = async function () {
   return records;
 };
 
-const indexToAlgolia = function (records) {
-  const client = algoliasearch(algolia.applicationId, algolia.searchApiKey);
+const indexToAlgolia = async function (records) {
+  const client = algoliasearch(algolia.applicationId, algolia.adminApiKey);
   const index = client.initIndex(algolia.index)
 
-  index.saveObjects(records)(({ objectIDs }) => {
-    console.log(objectIDs);
-  });
+  try {
+    if (typeof index.saveObjects === "function") {
+      await index.saveObjects(records)(({ objectIDs }) => {
+        console.log(objectIDs);
+      });
+    }
+  }
+  catch(e) {
+    console.error("index.saveObjects error:", e)
+  }
 };
 
 module.exports = {
   getAlgoliaMovieRecords,
+  indexToAlgolia
 };
