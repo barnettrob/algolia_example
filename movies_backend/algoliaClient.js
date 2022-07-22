@@ -1,6 +1,8 @@
 const { algolia } = require("./config");
 const axios = require("axios");
 const algoliasearch = require("algoliasearch");
+const client = algoliasearch(algolia.applicationId, algolia.adminApiKey);
+const index = client.initIndex(algolia.index);
 
 const getAlgoliaMovieRecords = async function () {
   const records = await axios
@@ -33,22 +35,46 @@ const getAlgoliaMovieRecords = async function () {
 };
 
 const indexToAlgolia = async function (records) {
-  const client = algoliasearch(algolia.applicationId, algolia.adminApiKey);
-  const index = client.initIndex(algolia.index)
-
   try {
     if (typeof index.saveObjects === "function") {
       await index.saveObjects(records)(({ objectIDs }) => {
         console.log(objectIDs);
       });
     }
+  } catch (e) {
+    console.error("index.saveObjects error:", e);
   }
-  catch(e) {
-    console.error("index.saveObjects error:", e)
+};
+
+const updateSingleAlgoliaRecord = async function (record) {
+  try {
+    if (typeof record === "object" && "objectID" in record) {
+      await index.partialUpdateObject({ record }).then(({ objectID }) => {
+        console.log(objectID);
+        return true;
+      });
+    }
+  } catch (e) {
+    console.error("index.saveObject error:", e);
   }
+};
+
+const getSingleAlgoliaRecord = async function (objectId) {
+  let record = null;
+  try {
+    record = await index.getObject(objectId).then((object) => {
+      return object;
+    });
+  } catch (e) {
+    console.error("index.getObject error:", e);
+  }
+
+  return record;
 };
 
 module.exports = {
   getAlgoliaMovieRecords,
-  indexToAlgolia
+  indexToAlgolia,
+  updateSingleAlgoliaRecord,
+  getSingleAlgoliaRecord,
 };
