@@ -5,7 +5,12 @@ const {
   getAlgoliaMovieRecords,
   indexToAlgolia,
   getSingleAlgoliaRecord,
+  updateSingleAlgoliaRecord,
 } = require("./algoliaClient.js");
+
+// Middleware to handle body in requests.
+app.use(express.json());
+app.use(express.urlencoded());
 
 app.get("/", (req, res) => {
   res.send(
@@ -37,7 +42,7 @@ app.get("/index", async (req, res) => {
   res.send(`Movies have been indexed.`);
 });
 
-app.get("/record/get/:objectId", async (req, res) => {
+app.get("/record/:objectId", async (req, res) => {
   if (!req.params.objectId) {
     return res.status(400).send("Missing objectId for Algolia record");
   }
@@ -52,6 +57,31 @@ app.get("/record/get/:objectId", async (req, res) => {
     });
 
   return res.send(record);
+});
+
+app.patch("/record", async (req, res) => {
+  if (!req.body) {
+    return res.status(400).send("Body required");
+  }
+
+  if (Object.keys(req.body).length === 0) {
+    return res.status(400).send("Body cannot be empty");
+  }
+
+  if (!("objectID" in req.body)) {
+    return res.status(400).send("Body must include objectID");
+  }
+
+  const updatedRecord = await updateSingleAlgoliaRecord(req.body)
+  .then((object) => {
+    return object;
+  })
+  .catch((e) => {
+    console.error(`updateSingleAlgoliaRecord error: ${e.message}`);
+    return false;
+  });
+
+  return res.send(`${updatedRecord} record updated`);
 });
 
 app.listen(expressPort, function () {

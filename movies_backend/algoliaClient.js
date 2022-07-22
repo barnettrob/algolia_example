@@ -47,16 +47,18 @@ const indexToAlgolia = async function (records) {
 };
 
 const updateSingleAlgoliaRecord = async function (record) {
+  let updatedRecord = null;
   try {
     if (typeof record === "object" && "objectID" in record) {
-      await index.partialUpdateObject({ record }).then(({ objectID }) => {
-        console.log(objectID);
-        return true;
+      updatedRecord = await index.partialUpdateObject(record).then(({ objectID }) => {
+        return objectID;
       });
     }
   } catch (e) {
-    console.error("index.saveObject error:", e);
+    console.error("index.partialUpdateObject error:", e);
   }
+
+  return updatedRecord
 };
 
 const getSingleAlgoliaRecord = async function (objectId) {
