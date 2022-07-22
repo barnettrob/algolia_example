@@ -4,10 +4,12 @@ const algoliaRouter = Router();
 const {
   getAlgoliaMovieRecords,
   indexToAlgolia,
+  addSingleAlgoliaRecord,
   getSingleAlgoliaRecord,
   updateSingleAlgoliaRecord,
 } = require("../lib/algoliaClient");
 
+// Index all movies from Algolia's github to Algolia index.
 algoliaRouter.post("/index/all-movies", async (req, res) => {
   const movies = await getAlgoliaMovieRecords()
     .then((response) => {
@@ -25,13 +27,36 @@ algoliaRouter.post("/index/all-movies", async (req, res) => {
       })
       .catch((e) => {
         console.error("indexToAlgolia error:", e.message);
-        return res.status(500).send("Something went wrong indexing");
+        return res.status(500).send("Something went wrong indexing records");
       });
   }
 
-  res.send(`Movies have been indexed.`);
+  res.send("Movies have been indexed.");
 });
 
+// Add a new movie object to Algolia.
+algoliaRouter.post("/movies", async (req, res) => {
+  if (!req.body) {
+    return res.status(400).send("Body required");
+  }
+
+  if (Object.keys(req.body).length === 0) {
+    return res.status(400).send("Body cannot be empty");
+  }
+
+  const record = await addSingleAlgoliaRecord(req.body)
+    .then((response) => {
+      return response;
+    })
+    .catch((e) => {
+      console.error("addSingleAlgoliaRecord error:", e.message);
+      return false;
+    });
+
+  return res.send(record);
+});
+
+// Get a movie object from Algolia's index.
 algoliaRouter.get("/movies/:uuid", async (req, res) => {
   if (!req.params.uuid) {
     return res.status(400).send("Missing uuid for Algolia record");
@@ -49,6 +74,7 @@ algoliaRouter.get("/movies/:uuid", async (req, res) => {
   return res.send(record);
 });
 
+// Update a movie object.
 algoliaRouter.put("/movies/:uuid", async (req, res) => {
   if (!req.params.uuid) {
     return res.status(400).send("Missing uuid for Algolia record");

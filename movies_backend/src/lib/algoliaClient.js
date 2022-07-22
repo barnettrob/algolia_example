@@ -46,19 +46,39 @@ const indexToAlgolia = async function (records) {
   }
 };
 
+const addSingleAlgoliaRecord = async function (record) {
+  let addedRecord = null;
+  try {
+    if (typeof record === "object") {
+      addedRecord = await index
+        .saveObject(record, { autoGenerateObjectIDIfNotExist: true })
+        .then(() => {
+          return record;
+        });
+    }
+  } catch (e) {
+    console.error("index.saveObject error:", e);
+    return e.message;
+  }
+
+  return addedRecord;
+};
+
 const updateSingleAlgoliaRecord = async function (record) {
   let updatedRecord = null;
   try {
     if (typeof record === "object" && "objectID" in record) {
-      updatedRecord = await index.partialUpdateObject(record).then(({ objectID }) => {
-        return objectID;
-      });
+      updatedRecord = await index
+        .partialUpdateObject(record)
+        .then(({ objectID }) => {
+          return objectID;
+        });
     }
   } catch (e) {
     console.error("index.partialUpdateObject error:", e);
   }
 
-  return updatedRecord
+  return updatedRecord;
 };
 
 const getSingleAlgoliaRecord = async function (objectId) {
@@ -77,6 +97,7 @@ const getSingleAlgoliaRecord = async function (objectId) {
 module.exports = {
   getAlgoliaMovieRecords,
   indexToAlgolia,
+  addSingleAlgoliaRecord,
   updateSingleAlgoliaRecord,
   getSingleAlgoliaRecord,
 };
