@@ -64,6 +64,20 @@ const addSingleAlgoliaRecord = async function (record) {
   return addedRecord;
 };
 
+const deleteSingleAlgoliaRecord = async function (objectId) {
+  let deletedRecord = null;
+  try {
+    deletedRecord = await index.deleteObject(objectId).then(() => {
+      return objectId;
+    });
+  } catch (e) {
+    console.error("index.saveObject error:", e);
+    return e.message;
+  }
+
+  return deletedRecord;
+};
+
 const updateSingleAlgoliaRecord = async function (record) {
   let updatedRecord = null;
   try {
@@ -100,4 +114,5 @@ module.exports = {
   addSingleAlgoliaRecord,
   updateSingleAlgoliaRecord,
   getSingleAlgoliaRecord,
+  deleteSingleAlgoliaRecord
 };

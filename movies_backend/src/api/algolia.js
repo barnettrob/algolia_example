@@ -7,6 +7,7 @@ const {
   addSingleAlgoliaRecord,
   getSingleAlgoliaRecord,
   updateSingleAlgoliaRecord,
+  deleteSingleAlgoliaRecord
 } = require("../lib/algoliaClient");
 
 // Index all movies from Algolia's github to Algolia index.
@@ -101,6 +102,24 @@ algoliaRouter.put("/movies/:uuid", async (req, res) => {
     });
 
   return res.send({ objectId: updatedRecord });
+});
+
+// Delete a movie object
+algoliaRouter.delete("/movies/:uuid", async (req, res) => {
+  if (!req.params.uuid) {
+    return res.status(400).send("Missing uuid for Algolia record");
+  }
+
+  const record = await deleteSingleAlgoliaRecord(req.params.uuid)
+    .then((object) => {
+      return object;
+    })
+    .catch((e) => {
+      console.error(`deleteSingleAlgoliaRecord error: ${e.message}`);
+      return false;
+    });
+
+  return res.send(record);
 });
 
 module.exports = {
