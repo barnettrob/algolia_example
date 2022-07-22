@@ -8,7 +8,7 @@ const {
   updateSingleAlgoliaRecord,
 } = require("../lib/algoliaClient");
 
-algoliaRouter.get("/index", async (req, res) => {
+algoliaRouter.post("/index/all-movies", async (req, res) => {
   const movies = await getAlgoliaMovieRecords()
     .then((response) => {
       return response;
@@ -32,12 +32,12 @@ algoliaRouter.get("/index", async (req, res) => {
   res.send(`Movies have been indexed.`);
 });
 
-algoliaRouter.get("/movies/:objectId", async (req, res) => {
-  if (!req.params.objectId) {
-    return res.status(400).send("Missing objectId for Algolia record");
+algoliaRouter.get("/movies/:uuid", async (req, res) => {
+  if (!req.params.uuid) {
+    return res.status(400).send("Missing uuid for Algolia record");
   }
 
-  const record = await getSingleAlgoliaRecord(req.params.objectId)
+  const record = await getSingleAlgoliaRecord(req.params.uuid)
     .then((object) => {
       return object;
     })
@@ -49,7 +49,11 @@ algoliaRouter.get("/movies/:objectId", async (req, res) => {
   return res.send(record);
 });
 
-algoliaRouter.patch("/movies", async (req, res) => {
+algoliaRouter.put("/movies/:uuid", async (req, res) => {
+  if (!req.params.uuid) {
+    return res.status(400).send("Missing uuid for Algolia record");
+  }
+
   if (!req.body) {
     return res.status(400).send("Body required");
   }
@@ -58,9 +62,8 @@ algoliaRouter.patch("/movies", async (req, res) => {
     return res.status(400).send("Body cannot be empty");
   }
 
-  if (!("objectID" in req.body)) {
-    return res.status(400).send("Body must include objectID");
-  }
+  // uuid (ObjectID) needs to be in body for Algolia partial update.
+  req.body["objectID"] = req.params.uuid;
 
   const updatedRecord = await updateSingleAlgoliaRecord(req.body)
     .then((object) => {
@@ -71,7 +74,7 @@ algoliaRouter.patch("/movies", async (req, res) => {
       return false;
     });
 
-  return res.send(`${updatedRecord} record updated`);
+  return res.send({ objectId: updatedRecord });
 });
 
 module.exports = {
