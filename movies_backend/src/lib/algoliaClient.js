@@ -1,4 +1,4 @@
-const { algolia } = require("./config");
+const { algolia } = require("../../config");
 const axios = require("axios");
 const algoliasearch = require("algoliasearch");
 const client = algoliasearch(algolia.applicationId, algolia.adminApiKey);
