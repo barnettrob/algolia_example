@@ -7,7 +7,7 @@ import {
   Pagination,
 } from "react-instantsearch-dom";
 import Results from "./results";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 const Search = () => {
   const [toggleView, setToggleView] = useState(false);
