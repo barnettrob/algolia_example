@@ -7,16 +7,42 @@ import {
   Pagination,
 } from "react-instantsearch-dom";
 import Results from "./results";
+import { useState, useRef } from "react";
 
 const Search = () => {
+  const [toggleView, setToggleView] = useState(false);
+
   const searchClient = algoliasearch(
     process.env.REACT_APP_ALGOLIA_APP_ID,
     process.env.REACT_APP_ALGOLIA_SEARCH_API_KEY
   );
 
+  const handleViewClick = () => {
+    setToggleView(!toggleView);
+    const hitsListEl = document.getElementsByClassName("ais-Hits-list");
+
+    for (const list of hitsListEl) {
+      if (!toggleView) {
+        list.classList.add("grid");
+      } else {
+        list.classList.remove("grid");
+      }
+    }
+  };
+
   return (
     <div className="ais-InstantSearch">
-      <h1>Search Movies</h1>
+      <div className="d-flex justify-content-between align-items-center">
+        <h1>Search Movies</h1>
+        <button
+          type="button"
+          className="btn btn-secondary btn-sm"
+          onClick={handleViewClick}
+          style={{ height: `30px` }}
+        >
+          {toggleView ? "Display as list" : "Display as grid"}
+        </button>
+      </div>
       <InstantSearch
         indexName={process.env.REACT_APP_ALGOLIA_INDEX}
         searchClient={searchClient}
@@ -39,7 +65,7 @@ const Search = () => {
               </div>
             </div>
             <div className="col">
-              <Hits hitComponent={Results} />
+              <Hits hitComponent={Results} orientation={toggleView} />
             </div>
           </div>
         </div>

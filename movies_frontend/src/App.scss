@@ -2,6 +2,21 @@
 ul.ais-Hits-list {
   list-style-type: none;
 }
+ul.ais-Hits-list.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  li.ais-Hits-item {
+    .actors {
+      //display: none;
+    }
+    img {
+      border-top-left-radius: var(--bs-card-inner-border-radius);
+      border-top-right-radius: var(--bs-card-inner-border-radius);
+      width: 100%;
+    }
+  }
+}
 
 /** Algolia Facets **/
 ul.ais-RefinementList-list {
