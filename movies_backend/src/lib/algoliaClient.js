@@ -50,10 +50,12 @@ const addSingleAlgoliaRecord = async function (record) {
   let addedRecord = null;
   try {
     if (typeof record === "object") {
+      // Filter out unwanted keys.
+      const cleanedObj = cleanObject(record);
       addedRecord = await index
-        .saveObject(record, { autoGenerateObjectIDIfNotExist: true })
+        .saveObject(cleanedObj, { autoGenerateObjectIDIfNotExist: true })
         .then(() => {
-          return record;
+          return cleanedObj;
         });
     }
   } catch (e) {
@@ -82,8 +84,10 @@ const updateSingleAlgoliaRecord = async function (record) {
   let updatedRecord = null;
   try {
     if (typeof record === "object" && "objectID" in record) {
+      // Filter out unwanted keys.
+      const cleanedObj = cleanObject(record);
       updatedRecord = await index
-        .partialUpdateObject(record)
+        .partialUpdateObject(cleanedObj)
         .then(({ objectID }) => {
           return objectID;
         });
@@ -108,11 +112,45 @@ const getSingleAlgoliaRecord = async function (objectId) {
   return record;
 };
 
+// Removes unwanted keys from object.
+const cleanObject = (object) => {
+  // Convert object keys into array.
+  const fields = typeof object === "object" ? Object.keys(object) : [];
+
+  // Allowed fields to index to Algolia.
+  const allowedFields = [
+    "objectID",
+    "title",
+    "alternative_titles",
+    "actors",
+    "year",
+    "image",
+    "color",
+    "score",
+    "rating",
+    "actor_facets",
+    "genre",
+  ];
+
+  // Filter out and include on fields from incoming object that match allowedFields.
+  const filteredKeys = allowedFields.filter(function (f) {
+    return fields.includes(f);
+  });
+
+  // Rebuild object with allowed key/values
+  let filteredObject = {};
+  for (let key in filteredKeys) {
+    filteredObject[filteredKeys[key]] = object[filteredKeys[key]];
+  }
+
+  return filteredObject;
+};
+
 module.exports = {
   getAlgoliaMovieRecords,
   indexToAlgolia,
   addSingleAlgoliaRecord,
   updateSingleAlgoliaRecord,
   getSingleAlgoliaRecord,
-  deleteSingleAlgoliaRecord
+  deleteSingleAlgoliaRecord,
 };
