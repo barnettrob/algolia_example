@@ -22,19 +22,19 @@ const Search = () => {
         searchClient={searchClient}
       >
         <SearchBox />
-        <div className="container">
+        <div className="container mt-4">
           <div className="row">
-            <div className="col">
+            <div className="col-lg-3">
               <div className="facet">
-                Genre
+                <div className="mt-2 mb-2 text-muted">Genre</div>
                 <RefinementList attribute="genre" />
               </div>
               <div className="facet">
-                Year
+                <div className="mt-2 mb-2 text-muted">Year</div>
                 <RefinementList attribute="year" />
               </div>
               <div className="facet">
-                Actor
+                <div className="mt-2 mb-2 text-muted">Actor</div>
                 <RefinementList attribute="actors" />
               </div>
             </div>

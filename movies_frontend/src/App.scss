@@ -1,46 +1,25 @@
-/** Algolia Pagination **/
-.ais-Pagination {
-  ul.ais-Pagination-list {
-    text-align: center;
-    list-style: none;
-    li.ais-Pagination-item {
-      display: inline-block;
-      a.ais-Pagination-link {
-        display: inline-block;
-        padding: 5px 14px;
-        border: 1px solid #ddd;
-        text-decoration: none;
-      }
-      a[aria-label="First"]:after {
-        padding-left: 4px;
-      }
-      a[aria-label="Previous"]:after {
-        padding-left: 4px;
-      }
-      a[aria-label="Next"]:before {
-        padding-right: 4px;
-      }
-      a[aria-label="Last"]:before {
-        padding-right: 4px;
-      }
-    }
-    li.ais-pagination--item__active {
-      font-weight: bold;
-    }
-    li.ais-Pagination-item--disabled {
-      display: none;
-    }
-    li.ais-Pagination-item--selected {
-      a.ais-Pagination-link {
-        z-index: 3;
-        color: #fff;
-        background-color: #4D89B1;
-        border-color: #4D89B1;
-      }
-    }
-  }
+/** Algolia Results **/
+ul.ais-Hits-list {
+  list-style-type: none;
 }
 
+/** Algolia Facets **/
+ul.ais-RefinementList-list {
+  list-style-type: none;
+  margin-left: -40px;
+}
+
+span.ais-RefinementList-labelText {
+  margin-left: 10px;
+}
+
+span.ais-RefinementList-count {
+  background-color: #ddd;
+  color: #757175;
+  padding: 5px;
+  border-radius: 10px;
+  font-size: 11px;
+}
 
 /*** Search box styling ***/
 .ais-SearchBox {
@@ -101,4 +80,47 @@
 }
 .ais-SearchBox-reset {
   display: none;
+}
+
+/** Algolia Pagination **/
+.ais-Pagination {
+  ul.ais-Pagination-list {
+    text-align: center;
+    list-style: none;
+    li.ais-Pagination-item {
+      display: inline-block;
+      a.ais-Pagination-link {
+        display: inline-block;
+        padding: 5px 14px;
+        border: 1px solid #ddd;
+        text-decoration: none;
+      }
+      a[aria-label="First"]:after {
+        padding-left: 4px;
+      }
+      a[aria-label="Previous"]:after {
+        padding-left: 4px;
+      }
+      a[aria-label="Next"]:before {
+        padding-right: 4px;
+      }
+      a[aria-label="Last"]:before {
+        padding-right: 4px;
+      }
+    }
+    li.ais-pagination--item__active {
+      font-weight: bold;
+    }
+    li.ais-Pagination-item--disabled {
+      display: none;
+    }
+    li.ais-Pagination-item--selected {
+      a.ais-Pagination-link {
+        z-index: 3;
+        color: #fff;
+        background-color: #4D89B1;
+        border-color: #4D89B1;
+      }
+    }
+  }
 }
