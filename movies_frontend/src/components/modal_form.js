@@ -32,6 +32,10 @@ const ModalForm = React.forwardRef((props, ref) => {
     formType = "Update";
   }
 
+  const handleFormSubmit = (values) => {
+    console.log("handle formSubmit Values", values);
+  };
+
   return (
     <div className="modal-form" ref={ref}>
       <div className="modal-content">
@@ -41,18 +45,19 @@ const ModalForm = React.forwardRef((props, ref) => {
           </span>
         </div>
         <h5 className="text-center mb-4">{formType} Movie</h5>
-        <Formik initialValues={initialValues}>
+        <Formik initialValues={initialValues} onSubmit={(values) => {handleFormSubmit(values)}}>
           {({
             values,
             errors,
             touched,
             handleChange,
             handleBlur,
-            handleSubmit,
             isSubmitting,
-            /* and other goodies */
+            handleSubmit
           }) => (
-            <form onSubmit={handleSubmit}>
+            <form
+              onSubmit={handleSubmit}
+            >
               <div className="container">
                 <div className="row">
                   <div className="col">
