@@ -7,10 +7,12 @@ import {
   Pagination,
 } from "react-instantsearch-dom";
 import Results from "./results";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import ModalForm from "./modal_form";
 
 const Search = () => {
   const [toggleView, setToggleView] = useState(false);
+  const addModalRef = useRef();
 
   const searchClient = algoliasearch(
     process.env.REACT_APP_ALGOLIA_APP_ID,
@@ -28,6 +30,13 @@ const Search = () => {
         list.classList.remove("grid");
       }
     }
+  };
+
+  const handleAddClick = (event) => {
+    event.preventDefault();
+
+    // Open Modal.
+    addModalRef.current.className = `${addModalRef.current.className} opened`;
   };
 
   return (
@@ -51,7 +60,7 @@ const Search = () => {
         <div className="container mt-4">
           <div className="row">
             <div className="col-lg-3">
-              <div className="facet">
+              <div className="facet mt-4">
                 <div className="mt-2 mb-2 text-muted">Genre</div>
                 <RefinementList attribute="genre" />
               </div>
@@ -65,9 +74,18 @@ const Search = () => {
               </div>
             </div>
             <div className="col">
+              <div className="d-flex flex-row-reverse mb-4">
+                <button
+                  className="btn btn-primary btn-sm mx-2"
+                  onClick={handleAddClick}
+                >
+                  Add Movie
+                </button>
+              </div>
               <Hits hitComponent={Results} orientation={toggleView} />
             </div>
           </div>
+          <ModalForm ref={addModalRef} record={null} />
         </div>
         <footer>
           <Pagination />

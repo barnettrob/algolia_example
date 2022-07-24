@@ -42,8 +42,6 @@ const Results = ({ hit }) => {
                 <button
                   className="btn btn-outline-primary btn-sm mx-2"
                   onClick={(event) => handleEditClick(event, hit.objectID)}
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
                 >
                   Edit
                 </button>

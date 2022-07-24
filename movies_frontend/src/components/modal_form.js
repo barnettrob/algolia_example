@@ -14,9 +14,7 @@ const ModalForm = React.forwardRef((props, ref) => {
         <div className="d-flex flex-row-reverse">
           <span className="close">
             <button
-              type="button"
               className="btn-close"
-              aria-label="Close"
               onClick={handleModalClose}
             ></button>
           </span>
