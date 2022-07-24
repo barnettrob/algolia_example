@@ -62,6 +62,9 @@ const ModalForm = React.forwardRef((props, ref) => {
                 <div className="row">
                   <div className="col">
                     <div className="field-input">
+                      <Field type="hidden" name="objectid" value={"objectID" in values ? values.objectID : ''} />
+                    </div>
+                    <div className="field-input">
                       <span className="pe-2">Title:</span>
                       <input
                         type="text"
