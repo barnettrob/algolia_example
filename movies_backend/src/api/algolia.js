@@ -10,6 +10,14 @@ const {
   deleteSingleAlgoliaRecord,
 } = require("../lib/algoliaClient");
 const { body, check } = require("express-validator");
+const basicAuth = require("express-basic-auth");
+const { basicAuthentication } = require("../../config");
+
+algoliaRouter.use(basicAuth({
+  users: {
+    [basicAuthentication.user]: basicAuthentication.password
+  }
+}))
 
 // Index all movies from Algolia's github to Algolia index.
 algoliaRouter.post("/index/all-movies", async (req, res) => {
