@@ -56,7 +56,7 @@ algoliaRouter.post(
   body("color").isString(),
   body("score").isNumeric(),
   body("rating").isNumeric(),
-  check("actor_facets.*").escape(),
+  check("actor_facets.*").isURL(),
   check("genre.*").escape(),
   async (req, res) => {
     if (!req.body) {
