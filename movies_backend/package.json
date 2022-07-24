@@ -4,7 +4,8 @@
     "axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "eslint": "^8.20.0",
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "express-validator": "^6.14.2"
   },
   "name": "movies_search_index",
   "version": "1.0.0",
