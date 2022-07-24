@@ -1,6 +1,7 @@
 import React from "react";
 import { useRef } from "react";
 import { Highlight } from "react-instantsearch-dom";
+import ModalForm from "./modal_form";
 
 const Results = ({ hit }) => {
   const modalRef = useRef();
@@ -78,8 +79,8 @@ const Results = ({ hit }) => {
                     <small>Actors:</small>
                     <small>
                       <ul>
-                        {hit.actors.map((actor) => (
-                          <li key={actor}>{actor}</li>
+                        {hit.actors.map((actor, index) => (
+                          <li key={index}>{actor}</li>
                         ))}
                       </ul>
                     </small>
@@ -90,16 +91,7 @@ const Results = ({ hit }) => {
           </div>
         </div>
       </div>
-      <div className="modal-form" ref={modalRef}>
-        <div className="modal-content">
-          <span className="close">
-            <a href="/" className="close-modal">
-              &times;
-            </a>
-          </span>
-          This is a form for {hit.objectID}
-        </div>
-      </div>
+      <ModalForm ref={modalRef} uuid={hit.objectID} />
     </div>
   );
 };
