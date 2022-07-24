@@ -36,14 +36,27 @@ const ModalForm = React.forwardRef((props, ref) => {
   }
 
   const handleFormSubmit = async (values) => {
-    await upsertMovie(values)
-      .then((res) => {
-        console.log("res", res);
-        window.location.reload(false);
-      })
-      .catch((e) => {
-        console.log("e", e.message);
-      });
+    if (typeof values === "object") {
+      // Fix actor_facets html encoded characters.
+      if ("actor_facets" in values) {
+        for (let key in values.actor_facets) {
+          values.actor_facets[key] = values.actor_facets[key].replace(
+            /[\u00A0-\u9999<>\&]/g,
+            function (i) {
+              return "&#" + i.charCodeAt(0) + ";";
+            }
+          );
+        }
+      }
+
+      await upsertMovie(values)
+        .then((res) => {
+          window.location.reload(false);
+        })
+        .catch((e) => {
+          console.log("e", e.message);
+        });
+    }
   };
 
   const recordValidation = Yup.object().shape({

@@ -11,7 +11,7 @@ export const upsertMovie = async (record) => {
     path = `movies/${record.objectID}`;
   }
 
-  // Call backend api.
+  // Call backend api to add or update movie.
   try {
     axios({
       method: method,
@@ -23,11 +23,32 @@ export const upsertMovie = async (record) => {
       },
     })
       .then((response) => {
-        console.log("addMovie response", response);
         return response;
       })
       .catch((e) => {
-        console.log("movie post error:", e.message);
+        console.log("movie upsert error:", e.message);
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteMovie = async (id) => {
+  // Call backend api to delete a movie.
+  try {
+    axios({
+      method: "delete",
+      url: `${apiUrl}movies/${id}`,
+      auth: {
+        username: apiUser,
+        password: apiPassword,
+      },
+    })
+      .then((response) => {
+        return response;
+      })
+      .catch((e) => {
+        console.log("movie delete error:", e.message);
       });
   } catch (error) {
     console.log(error);

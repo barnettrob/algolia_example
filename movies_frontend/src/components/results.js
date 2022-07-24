@@ -2,6 +2,7 @@ import React from "react";
 import { useRef } from "react";
 import { Highlight } from "react-instantsearch-dom";
 import ModalForm from "./modal_form";
+import { deleteMovie } from "../client/backend_api";
 
 const Results = ({ hit }) => {
   const modalRef = useRef();
@@ -13,7 +14,7 @@ const Results = ({ hit }) => {
     modalRef.current.className = `${modalRef.current.className} opened`;
   };
 
-  const handleDeleteClick = (event, id) => {
+  const handleDeleteClick = async (event, id) => {
     event.preventDefault();
     const confirmMsg = window.confirm(
       "Are you sure you want to delete this movie?"
@@ -21,8 +22,13 @@ const Results = ({ hit }) => {
 
     if (confirmMsg) {
       // Continue with delete.
-      console.log("event delete", event);
-      console.log("id", id);
+      await deleteMovie(id)
+      .then((res) => {
+        window.location.reload(false);
+      })
+      .catch((e) => {
+        console.log("e", e.message);
+      });
     }
   };
 
