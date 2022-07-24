@@ -87,7 +87,7 @@ const ModalForm = React.forwardRef((props, ref) => {
                                 <button
                                   type="button"
                                   onClick={() => arrayHelpers.insert(index, "")} // insert an empty string at a position
-                                  className="btn btn-outline-primary"
+                                  className="btn btn-outline-success"
                                 >
                                   +
                                 </button>
@@ -103,11 +103,6 @@ const ModalForm = React.forwardRef((props, ref) => {
                               Add an alternative title
                             </button>
                           )}
-                          <div>
-                            <button type="submit" className="btn btn-secondary">
-                              Add Alternative Titles
-                            </button>
-                          </div>
                         </div>
                       )}
                     />
@@ -156,20 +151,12 @@ const ModalForm = React.forwardRef((props, ref) => {
                               <button
                                 type="button"
                                 onClick={() => arrayHelpers.push("")}
-                                className="btn btn-outline-secondary"
+                                className="btn btn-secondary"
                               >
                                 {/* show this when user has removed all genre from the list */}
                                 Add a genre
                               </button>
                             )}
-                            <div>
-                              <button
-                                type="submit"
-                                className="btn btn-secondary"
-                              >
-                                Add Genre
-                              </button>
-                            </div>
                           </div>
                         )}
                       />
@@ -212,14 +199,6 @@ const ModalForm = React.forwardRef((props, ref) => {
                                 Add an actor
                               </button>
                             )}
-                            <div>
-                              <button
-                                type="submit"
-                                className="btn btn-secondary"
-                              >
-                                Add Actor
-                              </button>
-                            </div>
                           </div>
                         )}
                       />
@@ -274,7 +253,7 @@ const ModalForm = React.forwardRef((props, ref) => {
                           <div>
                             {values.actor_facets &&
                             values.actor_facets.length > 0 ? (
-                              values.actors.map((actor_facet, index) => (
+                              values.actor_facets.map((actor_facet, index) => (
                                 <div key={index}>
                                   <Field name={`actor_facets.${index}`} />
                                   <button
@@ -305,14 +284,6 @@ const ModalForm = React.forwardRef((props, ref) => {
                                 Add an actor facet
                               </button>
                             )}
-                            <div>
-                              <button
-                                type="submit"
-                                className="btn btn-secondary"
-                              >
-                                Add Actor Facet
-                              </button>
-                            </div>
                           </div>
                         )}
                       />
