@@ -36,10 +36,10 @@ const ModalForm = React.forwardRef((props, ref) => {
   }
 
   const handleFormSubmit = async (values) => {
-    console.log("handle formSubmit Values", values);
     await upsertMovie(values)
       .then((res) => {
         console.log("res", res);
+        window.location.reload(false);
       })
       .catch((e) => {
         console.log("e", e.message);
@@ -48,11 +48,6 @@ const ModalForm = React.forwardRef((props, ref) => {
 
   const recordValidation = Yup.object().shape({
     title: Yup.string().required("Required"),
-    alternative_titles: Yup.array(
-      Yup.object({
-        title: Yup.string().min(10, "10 characters needed"),
-      })
-    ).required("Required"),
     year: Yup.date().transform((value, originalValue, context) => {
       if (context.isType(value)) return value;
       // Parse date for year only.
@@ -63,12 +58,24 @@ const ModalForm = React.forwardRef((props, ref) => {
     score: Yup.number().test(
       "Is score positive",
       "Score must be a number greater than 0",
-      (value) => value > 0
+      (value) => {
+        if (value) {
+          return value > 0;
+        } else {
+          return true;
+        }
+      }
     ),
     rating: Yup.number().test(
       "Is rating positive",
       "Rating must be a number greater than 0",
-      (value) => value > 0
+      (value) => {
+        if (value) {
+          return value > 0;
+        } else {
+          return true;
+        }
+      }
     ),
   });
 

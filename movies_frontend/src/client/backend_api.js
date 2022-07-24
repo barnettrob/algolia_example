@@ -16,7 +16,6 @@ export const upsertMovie = async (record) => {
     axios({
       method: method,
       url: `${apiUrl}${path}`,
-      //headers: { "Access-Control-Allow-Origin": "*" },
       data: record,
       auth: {
         username: apiUser,
