@@ -1,5 +1,8 @@
 import React from "react";
 import { Field, FieldArray, Formik } from "formik";
+import * as Yup from "yup";
+import { parse } from "date-fns";
+import { upsertMovie } from "../client/backend_api";
 
 const ModalForm = React.forwardRef((props, ref) => {
   const handleModalClose = (event) => {
@@ -32,9 +35,42 @@ const ModalForm = React.forwardRef((props, ref) => {
     formType = "Update";
   }
 
-  const handleFormSubmit = (values) => {
+  const handleFormSubmit = async (values) => {
     console.log("handle formSubmit Values", values);
+    await upsertMovie(values)
+      .then((res) => {
+        console.log("res", res);
+      })
+      .catch((e) => {
+        console.log("e", e.message);
+      });
   };
+
+  const recordValidation = Yup.object().shape({
+    title: Yup.string().required("Required"),
+    alternative_titles: Yup.array(
+      Yup.object({
+        title: Yup.string().min(10, "10 characters needed"),
+      })
+    ).required("Required"),
+    year: Yup.date().transform((value, originalValue, context) => {
+      if (context.isType(value)) return value;
+      // Parse date for year only.
+      return parse(originalValue, "yyyy", new Date());
+    }),
+    color: Yup.string(),
+    image: Yup.string().url(),
+    score: Yup.number().test(
+      "Is score positive",
+      "Score must be a number greater than 0",
+      (value) => value > 0
+    ),
+    rating: Yup.number().test(
+      "Is rating positive",
+      "Rating must be a number greater than 0",
+      (value) => value > 0
+    ),
+  });
 
   return (
     <div className="modal-form" ref={ref}>
@@ -45,7 +81,13 @@ const ModalForm = React.forwardRef((props, ref) => {
           </span>
         </div>
         <h5 className="text-center mb-4">{formType} Movie</h5>
-        <Formik initialValues={initialValues} onSubmit={(values) => {handleFormSubmit(values)}}>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={recordValidation}
+          onSubmit={(values) => {
+            handleFormSubmit(values);
+          }}
+        >
           {({
             values,
             errors,
@@ -53,16 +95,18 @@ const ModalForm = React.forwardRef((props, ref) => {
             handleChange,
             handleBlur,
             isSubmitting,
-            handleSubmit
+            handleSubmit,
           }) => (
-            <form
-              onSubmit={handleSubmit}
-            >
+            <form onSubmit={handleSubmit}>
               <div className="container">
                 <div className="row">
                   <div className="col">
                     <div className="field-input">
-                      <Field type="hidden" name="objectid" value={"objectID" in values ? values.objectID : ''} />
+                      <Field
+                        type="hidden"
+                        name="objectid"
+                        value={"objectID" in values ? values.objectID : ""}
+                      />
                     </div>
                     <div className="field-input">
                       <span className="pe-2">Title:</span>
@@ -74,7 +118,11 @@ const ModalForm = React.forwardRef((props, ref) => {
                         value={values.title}
                       />
                     </div>
-                    {errors.title && touched.title && errors.title}
+                    {errors.title && touched.title ? (
+                      <div style={{ fontSize: "12px", color: "#ff0000" }}>
+                        {errors.title}
+                      </div>
+                    ) : null}
                     Alternative Titles:
                     <FieldArray
                       name="alternative_titles"
@@ -125,7 +173,12 @@ const ModalForm = React.forwardRef((props, ref) => {
                         onBlur={handleBlur}
                         value={values.year}
                       />
-                      {errors.year && touched.year && errors.year}
+                      <span className="invalid-feedback"></span>
+                      {errors.year && touched.year ? (
+                        <div style={{ fontSize: "12px", color: "#ff0000" }}>
+                          {errors.year}
+                        </div>
+                      ) : null}
                     </div>
                     <div className="field-input">
                       Genre:
@@ -222,6 +275,11 @@ const ModalForm = React.forwardRef((props, ref) => {
                         onBlur={handleBlur}
                         value={values.image}
                       />
+                      {errors.image && touched.image ? (
+                        <div style={{ fontSize: "12px", color: "#ff0000" }}>
+                          {errors.image}
+                        </div>
+                      ) : null}
                     </div>
                     <div className="field-input">
                       <span className="pe-2">Color:</span>
@@ -242,6 +300,11 @@ const ModalForm = React.forwardRef((props, ref) => {
                         onBlur={handleBlur}
                         value={values.score}
                       />
+                      {errors.score && touched.score ? (
+                        <div style={{ fontSize: "12px", color: "#ff0000" }}>
+                          {errors.score}
+                        </div>
+                      ) : null}
                     </div>
                     <div className="field-input">
                       <span className="pe-2">Rating:</span>
@@ -252,6 +315,11 @@ const ModalForm = React.forwardRef((props, ref) => {
                         onBlur={handleBlur}
                         value={values.rating}
                       />
+                      {errors.rating && touched.rating ? (
+                        <div style={{ fontSize: "12px", color: "#ff0000" }}>
+                          {errors.rating}
+                        </div>
+                      ) : null}
                     </div>
                     <div className="field-input">
                       Actor Facets:

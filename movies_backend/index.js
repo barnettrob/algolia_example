@@ -2,7 +2,10 @@ const express = require("express");
 const app = express();
 const { expressPort } = require("./config");
 const { apiRouter } = require("./src/api/");
+const cors = require("cors");
 
+// Cors to allow communication between sites.
+app.use(cors());
 // Middleware to handle body in requests.
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
