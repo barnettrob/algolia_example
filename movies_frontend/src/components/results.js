@@ -6,15 +6,12 @@ import ModalForm from "./modal_form";
 const Results = ({ hit }) => {
   const modalRef = useRef();
 
-  const handleEditClick = (event, id) => {
+  const handleEditClick = (event) => {
     event.preventDefault();
-    // Disable edit button so user does not keep clicking.
-    event.target.disabled = true;
+
     // Open Modal.
     modalRef.current.className = `${modalRef.current.className} opened`;
   };
-
-  const handleModalClose = () => {};
 
   const handleDeleteClick = (event, id) => {
     event.preventDefault();
@@ -91,7 +88,7 @@ const Results = ({ hit }) => {
           </div>
         </div>
       </div>
-      <ModalForm ref={modalRef} uuid={hit.objectID} />
+      <ModalForm ref={modalRef} record={hit} />
     </div>
   );
 };

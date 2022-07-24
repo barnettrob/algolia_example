@@ -20,17 +20,8 @@ ul.ais-Hits-list {
         border: 1px solid #888;
         width: 80%;
       }
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        &:hover,
-        &:focus {
-          color: black;
-          text-decoration: none;
-          cursor: pointer;
-        }
+      .btn-close {
+        width: 30px !important;
       }
     }
     .modal-form.opened {

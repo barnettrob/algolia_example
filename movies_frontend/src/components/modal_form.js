@@ -1,15 +1,27 @@
 import React from "react";
 
 const ModalForm = React.forwardRef((props, ref) => {
+  const handleModalClose = (event) => {
+    event.preventDefault();
+
+    // Close modal window.
+    ref.current.className = ref.current.className.replace("opened", "");
+  };
+
   return (
     <div className="modal-form" ref={ref}>
       <div className="modal-content">
-        <span className="close">
-          <a href="/" className="close-modal">
-            &times;
-          </a>
-        </span>
-        This is a form for {props.uuid}
+        <div className="d-flex flex-row-reverse">
+          <span className="close">
+            <button
+              type="button"
+              className="btn-close"
+              aria-label="Close"
+              onClick={handleModalClose}
+            ></button>
+          </span>
+        </div>
+        <pre>{JSON.stringify(props.record)}</pre>
       </div>
     </div>
   );
