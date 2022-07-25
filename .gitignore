@@ -14,6 +14,7 @@ movies_frontend/.pnp
 
 # testing
 movies_frontend/coverage
+movies_backend/coverage
 
 # production
 /build
