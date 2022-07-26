@@ -15,7 +15,7 @@ app.use("/api", apiRouter);
 
 app.get("/", (req, res) => {
   res.send(
-    "Welcome to Algolia index api.  Go to /index to index movie items from https://github.com/algolia/datasets/blob/master/movies/records.json"
+    "Welcome to Algolia index api.  Go to /api/v1/index/all-movies to index movie items from https://github.com/algolia/datasets/blob/master/movies/records.json"
   );
 });
 
