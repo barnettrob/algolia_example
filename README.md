@@ -1,4 +1,4 @@
-# Algolia Assigment
+# Algolia Assignment
 
 <p>This project demonstrates an Algolia administrative search page with movie records.  You can add, edit, and delete movies from the Algolia index from the single-page application (SPA).</p>
 
